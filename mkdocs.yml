@@ -1,0 +1,4 @@
+site_name: TSWG Test Spec
+site_url: https://github.com/m00sey/tswg-test-spec
+nav:
+  - Home: 'index.md'
