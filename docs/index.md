@@ -47,7 +47,8 @@ The primary key management operation is key Rotation (transference) via a novel 
 The KA2CE approach may be much more performant and scalable than more complex approaches that depend on a total ordering distributed consensus ledger. Nevertheless, KERI may employ a distributed consensus ledger when other considerations make it the best choice. The KERI approach to DKMI allows for a more granular composition. Moreover, because KERI is event streamed it enables DKMI that operates in-stride with data events streaming applications such as web 3.0, IoT, and others where performance and scalability are more important. The core KERI engine is identifier namespace independent. This makes KERI a candidate for a universal portable DKMI {{KERI}}{{KERI-ID}}{{UIT}}.
 # Normative references
 
-There are no normative references in this document.# Terms and Definitions
+There are no normative references in this document.
+# Terms and Definitions
 
 For the purposes of this document, the following terms and definitions apply.
 
@@ -125,7 +126,6 @@ Key event message
 
 Key event receipt
 : a Message whose body references a Key event and whose attachments must include one or more signatures on that Key event.
-
 # KERI foundational overview {#sec:content}
 
 TODO
@@ -194,6 +194,29 @@ A field may be represented by a framing code or block delimited serialization.  
 Most programming languages now support ordered dictionaries or hash tables that provide reproducible iteration over a list of ordered field (label, value) pairs where the ordering is the insertion or field creation order. This enables reproducible roundtrip serialization/deserialization of field maps. Serialized KERI data structures depend on insertion-ordered field maps for their canonical serialization/deserialization. KERI data structures support multiple serialization types, namely JSON, CBOR, MGPK, and CESR but for the sake of simplicity, we will only use JSON herein for examples {{RFC8259}}{{JSOND}}{{CBORC}}{{RFC8949}}{{MGPK}}{{CESR-ID}}. The basic set of normative field labels in KERI field maps is defined in the table in the following section.
 
 ## KERI field labels for data structures
+
+: My fancy table {#tbl:fancy-table}
+
++-------------------------+-------------+-------------------------------------------+
+| **Key**                 | **Type**    | **Value**                                 |
++=========================+=============+===========================================+
+| **Type**                | name        | *DeveloperExtensions*                     |
++-------------------------+-------------+-------------------------------------------+
+| **BaseVersion**         | name        | *2.0*                                     |
++-------------------------+-------------+-------------------------------------------+
+| **ExtensionLevel**      | integer     | 99999                                     |
++-------------------------+-------------+-------------------------------------------+
+| **ExtensionRevision**   | text string | :2022                                     |
+|                         |             |                                           |
+|                         |             | ::: note                                  |
+|                         |             | The COLON (U+003A) character is part      |
+|                         |             | of the revision identifier.               |
+|                         |             | :::                                       |
++-------------------------+-------------+-------------------------------------------+
+| **URL**                 | string      | <https://example.com>                     |
++-------------------------+-------------+-------------------------------------------+
+
+: KERI field labels for data structures {#tbl:field-lables}
 
 +------------+--------------------------------------------------------+----------------------------------------------------------------------+
 | **Label**  | **Title**                                              | **Description**                                                      |
@@ -430,7 +453,8 @@ Partial pre-rotation supports another important use case that of custodial key R
 
 ## Security considerations
 
-TODO security# This is an annex {#sec:annexA .normative}
+TODO security
+# This is an annex {#sec:annexA .normative}
 
 With some text
 
