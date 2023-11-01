@@ -67,6 +67,8 @@ Most programming languages now support ordered dictionaries or hash tables that 
 
 ## KERI field labels for data structures
 
+: KERI field labels for data structures {#tbl:field-lables}
+
 +------------+--------------------------------------------------------+----------------------------------------------------------------------+
 | **Label**  | **Title**                                              | **Description**                                                      |
 +============+========================================================+======================================================================+
