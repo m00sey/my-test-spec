@@ -10,15 +10,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.10.4
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.10.4
-
-      - name: Combine
-        run: |
-            make
-
       - name: Deploy MkDocs
         uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
       
