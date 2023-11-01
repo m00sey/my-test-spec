@@ -76,4 +76,3 @@ Key event message
 
 Key event receipt
 : a Message whose body references a Key event and whose attachments must include one or more signatures on that Key event.
-
