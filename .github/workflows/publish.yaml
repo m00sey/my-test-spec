@@ -15,18 +15,9 @@ jobs:
         with:
           python-version: 3.10.4
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Combine
-        run: |
-            make
-
-      - name: Deploy
-        run: |
-          mkdocs gh-deploy
-
+      - name: Deploy MkDocs
+        uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
+      
       - name: ISO
         uses: MatthiasValvekens/pandoc-iso@master
         with:
