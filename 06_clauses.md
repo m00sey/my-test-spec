@@ -70,7 +70,7 @@ Most programming languages now support ordered dictionaries or hash tables that 
 : My fancy table {#tbl:fancy-table}
 
 +-------------------------+-------------+-------------------------------------------+
-| **Label**                 | **Title**    | **Description**                                 |
+| **Label**               | **Title**   | **Description**                           |
 +=========================+=============+===========================================+
 | **Type**                | name        | *DeveloperExtensions*                     |
 +-------------------------+-------------+-------------------------------------------+
