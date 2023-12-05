@@ -121,11 +121,13 @@ A field label may have different values in different contexts but must not have 
 Because the order of appearance of fields is enforced in all KERI data structures, whenever a field appears in a given Message or block in a Message, the Message in which a label appears must provide the necessary context to fully determine the meaning of that field and hence the field value type and associated semantics.
 
 ### Compact KERI field labels
+
 The primary field labels are compact in that they use only one or two characters. KERI is meant to support resource-constrained applications such as supply chain or IoT applications. Compact labels better support resource-constrained applications in general. With compact labels, the over-the-wire verifiable signed serialization consumes a minimum amount of bandwidth. Nevertheless, without loss of generality, a one-to-one normative semantic overlay using more verbose expressive field labels may be applied to the normative compact labels after verification of the over-the-wire serialization. This approach better supports bandwidth and storage constraints on transmission while not precluding any later semantic post-processing. This is a well-known design pattern for resource-constrained applications.
 
 ### Special label ordering requirements
 
 #### Version string field
+
 The version string, ‘v’ field must be the first field in any top-level KERI field map in which it appears. Typically, the version string, ‘v’, field appears as the first top-level field in a KERI Message body. This enables a RegEx stream parser to consistently find the version string in any of the supported serialization formats for KERI Messages. The ‘v’ field provides a regular expression target for determining the serialization format and size (character count) of a serialized KERI Message body. A stream parser may use the version string to extract and deserialize (deterministically) any serialized KERI Message body in a stream of serialized KERI Messages. Each KERI Message in a stream may use a different serialization type.
 
 The format of the version string is ‘KERIvvSSSShhhhhh_’. The first four characters ‘KERI’ indicate the enclosing field map serialization. The next two characters, `vv` provide the lowercase hexadecimal notation for the major and minor version numbers of the version of the KERI specification used for the serialization. The first ‘v’ provides the major version number and the second ‘v`’provides the minor version number. For example, ‘01’ indicates major version 0 and minor version 1 or in dotted-decimal notation ‘0.1’. Likewise, ‘1c’ indicates major version 1 and minor version decimal 12 or in dotted-decimal notation ‘1.1’`. 
