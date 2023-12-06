@@ -15,6 +15,7 @@ date: 2022-11-29
 \toc
 
 \newpage
+
 ::: forewordtitle
 Foreword
 :::
@@ -23,6 +24,7 @@ The foreword goes here.
 
 
 \newpage
+
 ::: introtitle
 Introduction
 :::
@@ -36,6 +38,7 @@ The primary root-of-trust are SCIDs  that are strongly bound at issuance to a cr
 The primary key management operation is key Rotation (transference) via a novel key pre-rotation scheme. Two primary trust modalities motivated the design, these are a direct (one-to-one) mode and an indirect (one-to-any) mode. The indirect mode depends on witnessed Key event receipt logs (KERL) as a secondary root-of-trust for validating events, which is the background for the acronym KERI, Key Event Receipt Infrastructure. In the direct mode, the identity Controller establishes control via verified signatures of the controlling keypair. The indirect mode extends that trust basis with witnessed Key event receipt logs (KERLs) for validating events. The security and accountability guarantees of indirect mode are provided by KERI’s Agreement Algorithm for Control Establishment (KA2CE) among a set of Witnesses.
 
 The KA2CE approach may be much more performant and scalable than more complex approaches that depend on a total ordering distributed consensus ledger. Nevertheless, KERI may employ a distributed consensus ledger when other considerations make it the best choice. The KERI approach to DKMI allows for more granular composition. Moreover, because KERI is event streamed it enables DKMI that operates in-stride with data events streaming applications such as web 3.0, IoT, and others where performance and scalability are more important. The core KERI engine is identifier namespace independent. This makes KERI a candidate for a universal portable DKMI.
+
 \mainmatter
 
 \doctitle
@@ -49,9 +52,11 @@ The primary root-of-trust are SCIDs that are strongly bound at issuance to a cry
 The primary key management operation is key Rotation (transference) via a novel key pre-rotation scheme. Two primary trust modalities motivated the design, a direct (one-to-one) mode and an indirect (one-to-any) mode. The indirect mode depends on witnessed Key event receipt logs (KERL) as a secondary root-of-trust for validating events., which is the background for the acronym KERI, Key event receipt infrastructure. In the direct mode, the identity Controller establishes control via verified signatures of the controlling keypair. The indirect mode extends that trust basis with witnessed KERL for validating events. The security and accountability guarantees of indirect mode are provided by KERI’s Agreement Algorithm for Control Establishment (KA2CE) among a set of Witnesses.
 
 The KA2CE approach may be much more performant and scalable than more complex approaches that depend on a total ordering distributed consensus ledger. Nevertheless, KERI may employ a distributed consensus ledger when other considerations make it the best choice. The KERI approach to DKMI allows for a more granular composition. Moreover, because KERI is event streamed it enables DKMI that operates in-stride with data events streaming applications such as web 3.0, IoT, and others where performance and scalability are more important. The core KERI engine is identifier namespace independent. This makes KERI a candidate for a universal portable DKMI.
+
 # Normative references
 
 ISO/IEC 7498-1:1994 Information technology — Open Systems Interconnection — Basic Reference Model: The Basic Model
+
 # Terms and Definitions
 
 For the purposes of this document, the following terms and definitions apply.
@@ -67,7 +72,6 @@ Primitive
 
 Cryptographic Primitive
 : the serialization of a value associated with a cryptographic operation including but not limited to a digest (hash), a salt, a seed, a private key, a public key, or a signature. 
-
 
 Cryptonym
 : a cryptographic pseudonymous identifier represented by a string of characters derived from a random or pseudo-random secret seed or salt via a one-way cryptographic function with a sufficiently high degree of cryptographic strength (e.g., 128 bits, see appendix on cryptographic strength) {{OWF}}{{COWF}}{{TMCrypto}}{{QCHC}}. A Cryptonym is a type of Primitive . Due to the entropy in its derivation, a Cyptonym is a universally unique identifier and only the Controller of the secret salt or seed from which the Cryptonym is derived may prove control over the Cryptonym. Therefore the derivation function must  be associated with the Cryptonym and may be encoded as part of the Cryptonym itself.
@@ -153,6 +157,7 @@ Seals/Anchors
 Current threshold
 Next threshold
 Ricardian contracts (RC)
+
 # KERI foundational overview {#sec:content}
 
 Starting with an inception event establishing the initial key state and the first entry on the KEL. 
@@ -161,7 +166,6 @@ Witnesses and Watchers put in place.
 This forms the basis for an ecosystem and infrastructure based on KERI to support the issuance, verification and revocation of ACDC credentials, leveraging CESR as the encoding protocol.
 
 Plans for rotation events, planned and those in response to potential duplicitous activity]
-
 
 # KERI’s identifier system security overlay
 
