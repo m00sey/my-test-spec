@@ -1,6 +1,6 @@
 ---
-title:  "This is a test document"
-author: ["Matthias Valvekens"]
+title:  "Key Event Receipt Infrastructure"
+author: ["S. Smith"]
 toc-title: "Table of Contents"
 toc-depth: 2
 link-citations: true

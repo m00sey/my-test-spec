@@ -1,3 +1,3 @@
 # Normative references
 
-There are no normative references in this document.
+ISO/IEC 7498-1:1994 Information technology — Open Systems Interconnection — Basic Reference Model: The Basic Model
