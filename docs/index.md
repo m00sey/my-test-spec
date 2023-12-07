@@ -14,7 +14,8 @@ references:
     - id: JSOND
       title: "JavaScript Object Notation Delimiters"
       url: "https://www.json.org/json-en.html"
-      citation-label: "JSOND"
+      author: "author"
+      citation-label: "JSON Delimiters"
     - id: RFC8259
       citation-label: "RFC8259"
       url: "https://www.rfc-editor.org/rfc/rfc8259.txt"
