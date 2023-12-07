@@ -180,6 +180,24 @@ Key event receipt
 
 : message whose body references a Key event and whose attachments must include one or more signatures on that Key event.
 
+List  list of terms to be defined 
+Self-addressing identifiers (SAIDs)
+SAD (Self-Addressed Data)
+Autonomic namespaces (ANs)
+Autonomic identity system (AIS)
+Decentralized key management infrastructure (DPKI/DKMI)
+Key event receipt log (KERL)
+KERI’s Agreement Algorithm for Control Establishment (KA2CE)
+Controller
+Witness
+Watcher
+Key state notice
+Backer
+Configuration traits, Modes
+Seals/Anchors
+Current threshold
+Next threshold
+Ricardian contracts (RC)
 
 # Actual document content {#sec:content}
 
