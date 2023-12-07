@@ -1,6 +1,6 @@
 ---
 title:  "Key Event Receipt Infrastructure"
-author: ["S. Smith"]
+author: ["Samuel M. Smith"]
 toc-title: "Table of Contents"
 toc-depth: 2
 link-citations: true
@@ -12,10 +12,49 @@ iso:
     draft-stage: WD
 references:
     - id: JSON
-      citation-label: "JSON"
+      citation-label: JSON
       url: "https://www.rfc-editor.org/rfc/rfc8259.txt"
       author: "T. Bray, Ed."
       title: "The JavaScript Object Notation (JSON) Data Interchange Format"
+    - id: UIT
+      citation-label: UIT
+      url: "https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/IdentifierTheory_web.pdf"
+      author: "Samuel M. Smith"
+      title: "Universay Identifier Theory"
+    - id: DAD
+      citation-label: DAD
+      url: "https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/DecentralizedAutonomicData.
+      pdf"
+      author: "Samuel M. Smith"
+      title: "Decentralized Autonomic Data (DAD) and the three R's of Key Management"
+    - id:  SAID
+      citation-label: SAID
+      url: "https://github.com/WebOfTrust/ietf-said"
+      title: "Self-Addressing IDentifiers (SAID)"
+      author: "Samuel M. Smith"    
+    - id: SCPK
+      citation-label: SCPK
+      url: "https://link.springer.com/content/pdf/10.1007%2F3-540-46416-6_42.pdf"
+      title: "Self-certified public keys"
+      author: "Marc Girault"
+    - id: SCURL
+      citation-label: SCURL
+      url: "https://pdos.csail.mit.edu/~kaminsky/sfs-http.ps"
+      title: "SFS-HTTP: Securing the Web with Self-Certifying URLs"
+      author: "M. Kaminsky, E. Banks"
+    - id: SFS
+      citation-label: SFS
+      target: "https://pdos.csail.mit.edu/~kaminsky/sfs-http.ps"
+      title: "Self-certifying File System"
+      author: "David Mazieres"
+    - id: SCPN
+      citation-label: SCPN
+      url: "https://dl.acm.org/doi/pdf/10.1145/319195.319213"
+      title: "Escaping the Evils of Centralized Control with self-certifying pathnames"
+      seriesinfo: “MIT Laboratory for Computer Science, 2000"
+      author: "David Mazieres, M. F. Kaashoek"
+
+
 ---
 
 \maketitle
@@ -39,9 +78,9 @@ The foreword goes here.
 Introduction
 :::
 
-This document presents identity system-based secure overlay for the Internet is presented. This system is based on a Key Event Receipt Infrastructure (KERI) or the KERI protocol. The primary key management operation is key Rotation (transference) via a novel key pre-rotation scheme as the background for the acronym KERI.
+This document presents identity system-based secure overlay for the Internet is presented. This system is based on a Key Event Receipt Infrastructure (KERI) or the KERI protocol. The primary key management operation is key Rotation (transference) via a novel key pre-rotation scheme as the background for the acronym KERI. [@DAD]
 
-The identity system-based secure overlay for the Internet, based on KERI includes a primary root-of-trust in Self-certifying identifiers (SCIDs). This root-of-trust  presents a formalism for Autonomic identifiers (AIDs) and Autonomic namespaces (ANs). These are part of an Autonomic Identity System (AIS). This system uses the design principle of minimally sufficient means to provide a candidate trust spanning layer for the internet. Associated with this system is a decentralized key management infrastructure (DKMI). 
+The identity system-based secure overlay for the Internet, based on KERI includes a primary root-of-trust in Self-certifying identifiers (SCIDs) [@UIT] [@SCPK] [@SFS] [@SCPN] [SCURL]. This root-of-trust  presents a formalism for Autonomic identifiers (AIDs) and Autonomic namespaces (ANs). These are part of an Autonomic Identity System (AIS). This system uses the design principle of minimally sufficient means to provide a candidate trust spanning layer for the internet. Associated with this system is a decentralized key management infrastructure (DKMI). 
 
 The primary root-of-trust are SCIDs  that are strongly bound at issuance to a cryptographic signing (public, private) keypair which is self-contained until/unless control needs to be transferred to a new keypair. In that event, an append-only chained Key event log (KEL) of signed transfer statements provides end-verifiable control provenance. This makes intervening operational infrastructure replaceable because the event logs may be served up by any infrastructure including ambient infrastructure. End-verifiable logs on ambient infrastructure enable ambient verifiability (Verifiable by anyone, anywhere, at any time).
 
@@ -199,8 +238,13 @@ Current threshold
 Next threshold
 Ricardian contracts (RC)
 
-# Actual document content {#sec:content}
+# KERI foundational overview {#sec:content}
 
+## KERI’s identifier system security overlay
+
+The function of KERI's identifier-system security overlay is to establish the authenticity (or authorship) of the message payload in an IP Packet by verifiably attributing it to a cryptonymous Self-certifying identifier (an AID) via an attached set of one or more asymmetric keypair-based non-repudiable digital signatures. The current valid set of associated asymmetric keypair(s) is proven via a Verifiable data structure called the (KEL). The identifier system provides a mapping between the identifier and the keypair(s) that control the identifier, namely, the public key(s) from those keypairs. The private key(s) is secret and is not shared.
+
+An authenticatable (Verifiable) internet message (packet) or data item includes the identifier and data in its payload. Attached to the payload is a digital signature(s) made with the private key(s) from the controlling keypair(s). Given the identifier in a Message, any Verifier of a Message (data item) can use the identifier system mapping to look up the public key(s) belonging to the controlling keypair(s). The Verifier can then verify the attached signature(s) using that public key(s). Because the payload includes the identifier, the signature makes a non-repudiable cryptographic commitment to both the source identifier and the data in the payload.
 
 I can cite documents from the normative references: [@nrm:osi]. Or from the bibliography: [@JSON].
 
