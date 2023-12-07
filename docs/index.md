@@ -390,6 +390,47 @@ A field label may have different values in different contexts but must not have 
 
 Because the order of appearance of fields is enforced in all KERI data structures, whenever a field appears (in a given Message or block in a Message) the message in which a label appears must provide the necessary context to fully determine the meaning of that field and hence the field value type and associated semantics.
 
+### Compact KERI field labels
+
+The primary field labels are compact in that they use only one or two characters. KERI is meant to support resource-constrained applications such as supply chain or IoT (Internet of Things) applications. Compact labels better support resource-constrained applications in general. With compact labels, the over-the-wire verifiable signed serialization consumes a minimum amount of bandwidth. Nevertheless, without loss of generality, a one-to-one normative semantic overlay using more verbose expressive field labels may be applied to the normative compact labels after verification of the over-the-wire serialization. This approach better supports bandwidth and storage constraints on transmission while not precluding any later semantic post-processing. This is a well-known design pattern for resource-constrained applications.
+
+### Special label ordering requirements
+
+#### Version string field
+
+The Version string, `v`, field must be the first field in any top-level KERI field map in which it appears. Typically the Version string, `v`, field appears as the first top-level field in a KERI Message body. This enables a RegEx stream parser to consistently find the Version string in any of the supported serialization formats for KERI Messages. The `v` field provides a regular expression target for determining the serialization format and size (character count) of a serialized KERI Message body. A stream parser may use the Version string to extract and deserialize (deterministically) any serialized KERI Message body in a stream of serialized KERI Messages. Each KERI Message in a stream may use a different serialization type.
+
+The format of the Version string is `KERIvvSSSShhhhhh_`. The first four characters `KERI` indicate the enclosing field map serialization. The next two characters, `vv` provide the lowercase hexadecimal notation for the major and minor Version numbers of the Version of the KERI specification used for the serialization. The first `v` provides the major Version number and the second `v` provides the minor Version number. For example, `01` indicates major Version 0 and minor Version 1 or in dotted-decimal notation `0.1`. Likewise `1c` indicates major Version 1 and minor Version decimal 12 or in dotted-decimal notation `1.12`. 
+
+The next four characters `SSSS` indicate the serialization type in uppercase. The four supported serialization types are `JSON`, `CBOR`, `MGPK`, and `CESR` for the JSON, CBOR, MessagePack, and CESR serialization standards respectively. The next six characters provide in lowercase hexadecimal notation the total number of characters in the serialization of the KERI Message body. The maximum length of a given KERI Message body is thereby constrained to be 2<sup>24</sup> = 16,777,216 characters in length. The final character `-` is the Version string terminator. This enables later Versions of Authentic Chained Data Containers (ACDCs) to change the total Version string size and thereby enable versioned changes to the composition of the fields in the Version string while preserving deterministic regular expression extractability of the Version string. 
+
+Although a given KERI serialization type may use field map delimiters or Framing code characters that appear before (i.e,  prefix) the Version string field in a serialization, the set of possible prefixes is sufficiently constrained by the allowed serialization protocols to guarantee that a regular expression can determine unambiguously the start of any ordered field map serialization that includes the Version string as the first field value. Given the Version string, a parser may then determine the end of the serialization so that it can extract the full serialization (KERI Message body) from the Stream without first deserializing it or parsing it field-by-field. This enables performant Stream parsing and off-loading of KERI Message Streams that include any or all of the supported serialization types interleaved in a single Stream.
+
+#### SAID (Self-Addressing identifier) fields
+
+Some fields in KERI data structures may have a SAID (self-referential content addressable), as a filed value. In this context, `d` is short for digest, which is short for SAID. A SAID follows the SAID protocol. A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-Addressed Data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) may be compacted into its SAID. The uncompacted blocks for each associated SAID may be attached or cached to optimize bandwidth and availability without decreasing security.
+
+Each SAID provides a stable universal cryptographically verifiable and agile reference to its encapsulating block (serialized field map).
+
+A cryptographic commitment (such as a digital signature or cryptographic digest) on a given digest with sufficient cryptographic strength including collision resistance is equivalent to a commitment to the block from which the given digest was derived. Specifically, a digital signature on a SAID makes a Verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. This enables reasoning about KERI data structures in whole or in part via their SAIDS in a fully interoperable, Verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts {{RC}}. This includes reasoning about the whole KERI data structure given by its top-level SAID, `d`, field as well as reasoning about any nested or attached data structures using their SAIDS.
+
+#### AID fields
+
+Some fields, such as the `i` and `di` fields, must each have an AID as its value. An AID is a fully qualified SCID as described above {{KERI}}{{KERI-ID}}. An AID must be self-certifying.
+In this context, `i` is short for `ai`, which is short for the Autonomic identifier (AID). The AID given by the `i` field may also be thought of as a securely attributable identifier, authoritative identifier, authenticatable identifier, authorizing identifier, or authoring identifier. Another way of thinking about an `i` field is that it is the identifier of the authoritative entity to which a statement may be securely attributed, thereby making the statement verifiably authentic via a non-repudiable signature made by that authoritative entity as the Controller of the private key(s).
+
+#### Next Threshold field
+
+The `nt` field is next threshold for the Next establishment event.
+
+Common normalized ACDC and KERI labels
+
+`v` is the Version string
+`d` is the SAID of the enclosing block or map
+`i` is a KERI identifier AID
+`a` is the data attributes or data anchors depending on the message type
+
+
 
 # Another clause
 
