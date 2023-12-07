@@ -11,8 +11,6 @@ iso:
     document-year: 2022
     draft-stage: WD
 references:
-    JSOND:
-    title: JavaScript Object Notation Delimiters
     - id: JSOND
       title: "JavaScript Object Notation Delimiters"
       url: "https://www.json.org/json-en.html"
