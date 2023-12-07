@@ -14,7 +14,7 @@ references:
     - id: JSOND
       title: "JavaScript Object Notation Delimiters"
       url: "https://www.json.org/json-en.html"
-      citation-label: "JSON Delimiters"
+      citation-label: "JSOND"
     - id: RFC8259
       citation-label: "RFC8259"
       url: "https://www.rfc-editor.org/rfc/rfc8259.txt"
@@ -87,7 +87,6 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 
  - ISO Online browsing platform: available at <https://www.iso.org/obp>
  - IEC Electropedia: available at <http://www.electropedia.org/>
-
 
 
 PDF (Portable Document Format)
