@@ -11,11 +11,11 @@ iso:
     document-year: 2022
     draft-stage: WD
 references:
-    - id: cms-update
-      author: "R. Housley"
-      title: "RFC 8933: Update to the Cryptographic Message Syntax (CMS) for Algorithm Identifier Protection"
-      issued: 2020
-      url: "https://tools.ietf.org/html/rfc8933.html"
+  JSOND:
+    title: JavaScript Object Notation Delimiters
+    - id: JSOND
+      title: "JavaScript Object Notation Delimiters"
+      url: "https://www.json.org/json-en.html"
       citation-label: "RFC 8933"
     - id: iso-16609
       citation-label: "ISO 16609:2012"
