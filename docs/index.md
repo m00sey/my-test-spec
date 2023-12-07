@@ -1,6 +1,6 @@
 ---
-title:  "This is a test document"
-author: ["Matthias Valvekens"]
+title:  "Key Event Receipt Infrastructure"
+author: ["S. Smith"]
 toc-title: "Table of Contents"
 toc-depth: 2
 link-citations: true
@@ -11,16 +11,17 @@ iso:
     document-year: 2022
     draft-stage: WD
 references:
-  JSOND:
+    JSOND:
     title: JavaScript Object Notation Delimiters
     - id: JSOND
       title: "JavaScript Object Notation Delimiters"
       url: "https://www.json.org/json-en.html"
-      citation-label: "RFC 8933"
-    - id: iso-16609
-      citation-label: "ISO 16609:2012"
-      author: "ISO 16609:2012"
-      title: "Financial services --- Requirements for message authentication using symmetric techniques"
+      citation-label: "JSON Delimiters"
+    - id: RFC8259
+      citation-label: "RFC8259"
+      url: "https://www.rfc-editor.org/rfc/rfc8259.txt"
+      author: "T. Bray, Ed."
+      title: "The JavaScript Object Notation (JSON) Data Interchange Format"
 ---
 
 \maketitle
