@@ -189,8 +189,8 @@ I can cite documents from the normative references: [@nrm:osi]. Or from the bibl
 
 : My fancy table {#tbl:fancy-table}
 
-+--------+----------+-----------+
-| **Key**| **Type** | **Value** |
++-------------------------+-------------+-------------------------------------------+
+| **Key**                 | **Type**    | **Value**                                 |
 +=========================+=============+===========================================+
 | **Type**                | name        | *DeveloperExtensions*                     |
 +-------------------------+-------------+-------------------------------------------+
@@ -249,6 +249,7 @@ An N-bit long base-2 random number has 2<sup>N</sup> different possible values. 
 The  adversary may have access to supercomputers. Current supercomputers can perform on the order of one quadrillion operations per second. Individual CPU cores can only perform about 4 billion operations per second, but a supercomputer will parallelly employ many cores. A quadrillion is approximately 2<sup>50</sup> = 1,125,899,906,842,624. Suppose somehow an adversary had control over one million (2<sup>20</sup> = 1,048,576) supercomputers which could be employed in parallel when mounting a brute force attack. The adversary then could try 2<sup>50</sup> x  2<sup>20</sup> = 2<sup>70</sup> values per second (assuming very conservatively that each try took only one operation).
 
 There are about 3600 * 24 * 365 = 313,536,000 = 2<sup>log<sub>2</sub>313536000</sup>=2<sup>24.91</sup> ~= 2<sup>25</sup> seconds in a year. Thus this set of a million super computers could try 2<sup>50+20+25</sup> = 2<sup>95</sup> values per year. For a 128-bit random number this means that the adversary would need on the order of 2<sup>128-95</sup> = 2<sup>33</sup> = 8,589,934,592 years to find the right value. This assumes that the value of breaking the cryptosystem is worth the expense of that much computing power. Consequently, a cryptosystem with perfect-security and 128 bits of cryptographic strength is computationally infeasible to break via brute force attack.
+
 
 # Information theoretic security and perfect-security {#sec:annexB .informative}
 
