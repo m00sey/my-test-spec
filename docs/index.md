@@ -334,30 +334,62 @@ A field may be represented by a framing code or block delimited serialization.  
 
 Most programming languages now support ordered dictionaries or hash tables that provide reproducible iteration over a list of ordered field (label, value) pairs where the ordering is the insertion or field creation order. This enables reproducible round trip serialization/deserialization of field maps. Serialized KERI data structures depend on insertion-ordered field maps for their canonical serialization/deserialization. KERI data structures support multiple serialization types, namely JSON, CBOR, MGPK, and CESR but for the sake of simplicity, JSON only will be used for examples. The basic set of normative field labels in KERI field maps is defined in the table in the following section.
 
+## KERI field labels for data structures
 
-: My fancy table {#tbl:fancy-table}
+: KERI field labels for data structures {#tbl:field-lables}
 
-+-------------------------+-------------+-------------------------------------------+
-| **Key**                 | **Type**    | **Value**                                 |
-+=========================+=============+===========================================+
-| **Type**                | name        | *DeveloperExtensions*                     |
-+-------------------------+-------------+-------------------------------------------+
-| **BaseVersion**         | name        | *2.0*                                     |
-+-------------------------+-------------+-------------------------------------------+
-| **ExtensionLevel**      | integer     | 99999                                     |
-+-------------------------+-------------+-------------------------------------------+
-| **ExtensionRevision**   | text string | :2022                                     |
-|                         |             |                                           |
-|                         |             | ::: note                                  |
-|                         |             | The COLON (U+003A) character is part      |
-|                         |             | of the revision identifier.               |
-|                         |             | :::                                       |
-+-------------------------+-------------+-------------------------------------------+
-| **URL**                 | string      | <https://example.com>                     |
-+-------------------------+-------------+-------------------------------------------+
++------------+-------------------------------+--------------------------------------+
+| **Label**  | **Title**                     | **Description**                      |
++============+===============================+======================================+
+| **v**      | Version string                |                                      |
++------------+-------------------------------+--------------------------------------+
+| **i**      | Identifier prefix (AID)       |                                      |
++------------+-------------------------------+--------------------------------------+
+| **s**      | Sequence number               |                                      |
++------------+-------------------------------+--------------------------------------+
+| **t**      | Message type                  |                                      |
++------------+-------------------------------+--------------------------------------+
+| **te**     | Last received event Message   |                                      |
+|            | type in a Key state notice    |                                      |
++------------+-------------------------------+--------------------------------------+
+| **d**      | Event SAID                    | SAID of the enclosing block or map   |
++------------+-------------------------------+--------------------------------------+
+| **p**      | Prior event SAID              |                                      |
++------------+-------------------------------+--------------------------------------+
+| **kt**     | Key signing threshold         |                                      |
++------------+-------------------------------+--------------------------------------+
+| **k**      | List of signing keys          | Ordered key set                      |
++------------+-------------------------------+--------------------------------------+
+| **nt**     | Next Key signing threshold    | Next threshold for the next          |
+|            |                               | Establishement event                 |
++------------+-------------------------------+--------------------------------------+
+| **n**      | List of next Key digests      | Ordered key digest set               |
++------------+-------------------------------+--------------------------------------+
+| **bt**     | Backer threshold              |                                      |
++------------+-------------------------------+--------------------------------------+
+| **b**      | List of Backers               | Ordered Backer set of AIDs           |
++------------+-------------------------------+--------------------------------------+
+| **br**     | List of Backers to remove     | Ordered Backer set of AIDs           |
++------------+-------------------------------+--------------------------------------+
+| **ba**     | List of Backers to add        | Ordered Backer set of AIDs           |
++------------+-------------------------------+--------------------------------------+
+| **c**      | List of Configuration Traits, |                                      |
+|            | Modes                         |                                      | 
++------------+-------------------------------+--------------------------------------+
+| **a**      | List of Anchors               | Seals; data attributes or data       |
+|            |                               | anchors depending on the message type|
++------------+-------------------------------+--------------------------------------+
+| **di**     | Delegator identifier prefix   | AID                                  |
++------------+-------------------------------+--------------------------------------+
+| **rd**     | Merkel Tree Root Digest       | SAID                                 |
++------------+-------------------------------+--------------------------------------+
+| **ee**     | Last Establishment event map  |                                      |
++------------+-------------------------------+--------------------------------------+
 
+A field label may have different values in different contexts but must not have a different field value type. This requirement makes it easier to implement in strongly typed languages with rigid data structures. Notwithstanding the former, some field value types may be a union of elemental value types.
 
-I can also refer to @tbl:fancy-table.
+Because the order of appearance of fields is enforced in all KERI data structures, whenever a field appears (in a given Message or block in a Message) the message in which a label appears must provide the necessary context to fully determine the meaning of that field and hence the field value type and associated semantics.
+
 
 # Another clause
 
