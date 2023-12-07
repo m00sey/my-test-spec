@@ -430,31 +430,338 @@ Common normalized ACDC and KERI labels
 `i` is a KERI identifier AID
 `a` is the data attributes or data anchors depending on the message type
 
+##  Seals
+
+### Digest seal
+
+```
+{
+  "d": "Eabcde..."
+}
+```
+
+### Merkle Tree root digest seal
+
+```
+{
+  "rd": "Eabcde8JZAoTNZH3ULvaU6JR2nmwyYAfSVPzhzS6b5CM"
+}
+```
+
+### Backer seal
+
+```
+{
+  "bi": "BACDEFG8JZAoTNZH3ULvaU6JR2nmwyYAfSVPzhzS6b5CM",
+  "d" : "EFGKDDA8JZAoTNZH3ULvaU6JR2nmwyYAfSVPzhzS6b5CM"
+}
+```
+
+### Event seal
+```
+{
+
+  "i": "Ebietyi8JZAoTNZH3ULvaU6JR2nmwyYAfSVPzhzS6b5CM.",
+  "s": "3",
+  "d": "Eabcde8JZAoTNZH3ULvaU6JR2nmwyYAfSVPzhzS6b5CM"
+}
+```
 
 
-# Another clause
+### Last Establishment event seal (6.3.5)
 
-## With a subclause
+```
+{
+  "i": "BACDEFG8JZAoTNZH3ULvaU6JR2nmwyYAfSVPzhzS6b5CM",
+}
+```
 
-Let's cite @sec:content.
+### Key event messages (Non-delegated)
 
-::: note
-This is a note.
-:::
+Because adding the `d` field SAID to every Key event Message type will break all the explicit test vectors. Its no additional effort to normalize the field ordering across all Message types and Seals.
 
-::: note
-This is another note. Check out the numbering.
-:::
+Originally all Messages included an `i` field but that is not true anymore. So the changed field ordering is to put the fields that are common to all Message types first in order followed by fields that are not common. The common fields are `v`, `t`, `d`.
 
-::: example
-How about an example?
-:::
+# KERI key management
 
-## And another subclause
+## KERI keypair labeling convention
 
-::: note
-This is also a note, but it's not numbered.
-:::
+In order to make key event expressions both clearer and more concise, a keypair labeling convention is used. When an AID's Key state is dynamic, i.e., the set of controlling keypairs is transferable, then the keypair labels are indexed in order to represent the successive sets of keypairs that constitute the Key state at any position in the KEL. Specifically, indexes on the labels for AIDs that are transferable to indicate which set of keypairs is associated with the AID at any given point in its Key state or KEL. In contrast, when the Key state is static, i.e., the set of controlling keypairs is non-transferable, then no indexes are needed because the Key state never changes.
+
+Recall that a keypair is a two tuple, (public, private), of the respective public and private keys in the keypair. For a given AID, the labeling convention uses an uppercase letter label to represent that AID. When the Key state is dynamic, a superscripted index on that letter is used to indicate which keypair is used at a given Key state. Alternatively, the index may be omitted when the context defines which keypair and which Key state, such as, for example, the latest or current Key state. To reiterate, when the Key state is static no index is needed.
+
+In general, without loss of specificity, an uppercase letter label is used to represent both an AID and when indexed to represent its keypair or keypairs that are authoritative at a given Key state for that AID. In addition, when expressed in tuple form, the uppercase letter also represents the public key and the lowercase letter represents the private key for a given keypair. For example, let ‘A’ denote and AID, then let ‘A’ also denote a keypair which may be also expressed in tuple form as (A, a). Therefore, when referring to the keypair itself as a pair and not the individual members of the pair, either the uppercase label, ‘A’, or the tuple, ‘(A, a)’, may be used to refer to the keypair itself. When referring to the individual members of the keypair then the uppercase letter, ‘A’, refers to the public key, and the lowercase letter, ‘a’, refers to the private key.
+
+The sequence of keypairs that are authoritative (i.e., establish control authority) for an AID should be indexed by the zero-based integer-valued, strictly increasing by one, variable ‘I’. Furthermore, as described above, an Establishment event may change the Key state. The sequence of Establishment events should be indexed by the zero-based integer-valued, strictly increasing by one, variable ‘j’. When the set of controlling keypairs that are authoritative for a given Key state includes only one member, then ‘i = j’ for every keypair, and only one index is needed. But when the set of keypairs used at any time for a given Key state includes more than one member, then *’ != j’ for every keypair, and both indices are needed.
+
+### Case in which only one index is needed
+
+Because i = j, the indexed keypair for AID, A, is denoted by A<sup>i</sup> or in tuple form by (A<sup>i</sup>, a<sup>i</sup>) where the keypair that is indexed uses the i<sup>th</sup> keypair from the sequence of all keypairs.  
+
+Example of the keypair sequence – one index:
+
+Expressed as the list, [A<sup>0</sup>, A<sup>1</sup>, A<sup>2</sup>, ...]
+
+Where:
+A<sup>0</sup>                			is the zero element in this sequence;
+(A<sup>0</sup>, a<sup>0</sup>)         	is the tuple form.
+
+### Case in which both indexes are needed
+
+Because i!= j, the indexed keypair for AID, ‘A’, is denoted by A<sup>i</sup> or in tuple form by (A<sup>i</sup>, a<sup>i</sup>) where the keypair that is  indexed is authoritative or potentially authoritative for i<sup>th</sup> keypair from the sequence of all keypairs that is authoritative in the j<sup>th</sup> Key state. 
+
+Example of the keypair sequence – using three keypairs to control authority
+Expressed as the list, [A<sup>0</sup>, A<sup>1</sup>, A<sup>2</sup>, A<sup>2,0</sup>, A<sup>3,1</sup>, A<sup>4,1</sup>,  A<sup>5,1</sup>].
+
+Where:
+the first two Key states will consume the first six keypairs of the list.
+
+### Labelling the digest of the public key  
+
+In the latter case, where both indices are needed because *i != j*, let the indexed keypair for AID, *A*, be denoted by *A<sup>i,j</sup>* or in tuple form by *(A<sup>i,j</sup>, a<sup>i,j</sup>)* where the keypair so indexed is authoritative or potentially authoritative for *i<sup>th</sup>* keypair from the sequence of all keypairs that is authoritative in the the *j<sup>th</sup>* key state. Suppose, for example, that for a given AID labeled *A* each key state uses three keypairs to establish control authority, then the sequence of the first two key states will consume the first six keypairs as given by the following list, *[A<sup>0,0</sup>, A<sup>1,0</sup>, A<sup>2,0</sup>, A<sup>3,1</sup>,  A<sup>4,1</sup>,  A<sup>5,1</sup>]*.
+W
+Furthermore, with pre-rotation, each public key from the set of pre-rotated keypairs may be hidden as a qualified cryptographic digest of that public key. The digest of the public key labeled *A* is represented using the functional notation *H(A)* for hash (digest). 
+
+Example of a singly indexed digest -  A<sup>i</sup> is denoted by H(A</u><sup>i</sup>)
+
+Example of a doubly indexed digest - A<sup>i,j</sup> is denoted by H(A<sup>i,j</sup>}
+
+Where:
+The digest of the public key labeled ‘A’ is represented using the functional notation ’(A)’ for hash (digest).
+
+A pre-rotated keypair is potentially authoritative for the next or subsequent Establishment event after the Establishment event when the digest of the pre-rotated keypair first appears. Therefore, its j<sup>th</sup> index value is one greater than the j<sup>th</sup> index value of the Establishment event in which its digest first appears. As explained in more detail for partial Rotation of a pre-rotated set, a pre-rotated keypair from a set of two or more pre-rotated keypairs is only potentially authoritative so that its actual authoritative j<sup>th</sup>  index may change when it is actually rotated in, if ever.
+
+### Labelling key events in a KEL
+
+Finally, each Key event in a KEL must have a zero-based integer-valued, strictly increasing by one, sequence number. Abstractly, the variable ‘k’ can be used as an index on any keypair label to denote the sequence number of an event for which that keypair is authoritative. Usually, this appears as a subscript.  Thus any given keypair label could have three indices, namely, ‘i,j,k’ .
+
+Example of labelleing key events in a KEL- <sup>i,j</sup><sub>k</sub>
+
+Where:
+
+‘i’ denotes the <sup>th</sup> keypair from the sequence of all keypairs;
+‘j’ denotes the j<sup>th</sup> Establishment event in which the keypair is authoritative;
+ and ‘k’ represents the k<sup>th</sup> Key event in which the keypair is authoritative. 
+
+When a KEL has only Establishment events, then j = k.
+
+## Pre-rotation 
+
+Each Establishment event involves two sets of keys that each play a role that together establishes complete control authority over the AID associated at the location of that event in the KEL. To clarify, control authority is split between keypairs that hold signing authority and keypairs that hold rotation authority. A Rotation revokes and replaces the keypairs that hold signing authority as well as replacing the keypairs that hold rotation authority. The two set sets of keys are labeled current and next. Each Establishment event designates both sets of keypairs. The first (current) set consists of the authoritative signing keypairs bound to the AID at the location in the KEL where the Establishment event occurs. The second (next) set consists of the pre-rotated authoritative rotation keypairs that will be actualized in the next (ensuing) Establishment event. Each public key in the set of next (ensuing) pre-rotated public keys is hidden in or blinded by a digest of that key. When the Establishment event is the Inception event then the current set is the initial set. The pre-rotated next set of Rotation keypairs are one-time use only rotation keypairs, but may be repurposed as signing keypairs after their one time use to rotate.
+
+In addition, each Establishment event designates two threshold expressions, one for each set of keypairs (current and next). The current threshold determines the needed satisficing subset of signatures from the associated current set of keypairs for signing authority to be considered valid. The next threshold determines the needed satisficing subset of signatures from the associated next set of hidden keypairs for rotation authority to be considered valid. The simplest type of threshold expression for either threshold is an integer that is no greater than nor no less than the number of members in the set. An integer threshold acts as an ‘M of N’ threshold where ‘M’ is the threshold and ‘N’ is the total number of keypairs represented by the public keys in the key list. If any set of ‘M’ of the ‘N’ private keys belonging to the public keys in the key list verifiably signs the event, then the threshold is satisfied by the Contoller exercising its control authority role (signing or rotating) associated with the given key list and threshold.
+
+To clarify, each Establishment event must include a list (ordered) of the qualified public keys from each of the current (initial) set of keypairs), a threshold for the current set, a list (ordered) of the qualified cryptographic digests of the qualified public keys from the next set of keypairs, and a threshold for the next set. Each event must  also include the AID itself as either a qualified public key or a qualified digest of the Inception event.
+
+Each Non-establishment event must be signed by a threshold-satisficing subset of private keys from the current set of keypairs from the most recent Establishment event. The following sections detail the requirements for a valid set of signatures for each type of Establishment event.
+
+## Inception event pre-rotation
+
+The creator of the Inception event must create two sets of keypairs, the current (initial) set, and the next set. The private keys from the current set are kept as secrets. The public keys from the current set are exposed via inclusion in the Inception event. Both the public and private keys from the next set are kept as secrets and only the cryptographic digests of the public keys from the next set are exposed via inclusion in the event. The public keys from the next set are only exposed in a subsequent Establishment event, if any.  Both thresholds are exposed via inclusion in the event.
+
+Upon emittance of the Inception event, the current (initial) set of keypairs becomes the current set of Verifiable authoritative signing keypairs for the AID. Emittance of the Inception event also issues the identifier. Moreover, to be verifiably authoritative, the Inception event must be signed by a threshold satisficing subset of the current (initial) set of private keys. The Inception event may be verified against the attached signatures using the included current (initial) list of public keys. When self-addressing, a digest of the serialization of the Inception event provides the AID itself as derived by the SAID protocol {{SAID-ID}}.
+
+There must be only one Establishment event that is an Inception event.. All subsequent Establishment events must be Rotation events.
+
+Inception event message example:
+
+When the AID in the `i` field is SAID, the new Inception event has two
+qualified digest fields. In this case both the `d` and `i` fields must have the same value. This means the digest suite's derivation code, used for the `i` field must be the same for the `d` field.
+The derivation of the `d` and `i` fields is special. Both the `d` and `i` fields are replaced with dummy `#` characters of the length of the digest to be used. The digest of the Inception event is then computed and both the `d` and `i` fields are replaced with the qualified digest value. Validation of an Inception event requires examining the `i` field's derivation code and if it is a digest-type then the `d` field must be identical otherwise the Inception event is invalid.
+
+When the AID is not self-addressing, i.e.., the `i` field derivation code is not a digest, then the `i` is given its value and the `d` field is replaced with dummy characters `#` of the correct length and then the digest is computed., which  is the standard SAID algorithm.
+
+Inception event message body
+
+```
+{
+  "v": "KERI10JSON0001ac_",
+  "t": "icp",
+  "d": "EL1L56LyoKrIofnn0oPChS4EyzMHEEk75INJohDS_Bug",
+  "i": "EL1L56LyoKrIofnn0oPChS4EyzMHEEk75INJohDS_Bug",
+  "s": "0",
+  "kt": "2", // 2 of 3
+  "k" :
+    [
+      "DnmwyZ-i0H3ULvad8JZAoTNZaU6JR2YAfSVPzh5CMzS6b",
+      "DZaU6JR2nmwyZ-VPzhzSslkie8c8TNZaU6J6bVPzhzS6b",
+      "Dd8JZAoTNnmwyZ-i0H3U3ZaU6JR2LvYAfSVPzhzS6b5CM"
+    ],
+  "nt": "3",  // 3 of 5
+  "n" :
+    [
+      "ETNZH3ULvYawyZ-i0d8JZU6JR2nmAoAfSVPzhzS6b5CM",
+      "EYAfSVPzhzaU6JR2nmoTNZH3ULvwyZb6b5CMi0d8JZAS",
+      "EnmwyZdi0d8JZAoTNZYAfSVPzhzaU6JR2H3ULvS6b5CM",
+      "ETNZH3ULvS6bYAfSVPzhzaU6JR2nmwyZfi0d8JZ5s8bk",
+      "EJR2nmwyZ2i0dzaU6ULvS6b5CM8JZAoTNZH3YAfSVPzh",
+    ],
+  "bt": "2",
+  "b":
+    [
+      "BGKVzj4ve0VSd8z_AmvhLg4lqcC_9WYX90k03q-R_Ydo",
+      "BuyRFMideczFZoapylLIyCjSdhtqVb31wZkRKvPfNqkw",
+      "Bgoq68HCmYNUDgOz4Skvlu306o_NY-NrYuKAVhk3Zh9c"
+    ],
+  "c": [],
+  "a": []
+}
+```
+
+
+## Rotation using pre-rotation
+
+Unlike Inception, the creator of a Rotation event must create only one set of keypairs, the newly next set. Both the public and private keys from the newly created next set are kept as secrets and only the cryptographic digests of the public keys from the newly next set are exposed via inclusion in the event. The list of newly current public keys must  include the  an old  next threshold satisficing subset of old next public keys from the most recent prior Establishment event.  For short, the next threshold from the most recent prior Establishment event is denoted as the prior next threshold, and the list of unblinded public keys taken from the blinded key digest list from the most recent prior Establishment event as the prior next key list. The subset of old prior next keys that are included in the newly current set of public keys must  be unhidden or unblinded because they appear as the public keys themselves and no longer appear as digests of the public keys. Both thresholds are exposed via inclusion in the event.
+
+Upon emittance of the Rotation event, the newly current keypairs become the current set of Verifiable authoritative signing keypairs for the identifier. The old current set of keypairs from the previous Establishment event has been revoked and replaced by the newly current set. Moreover, to be verifiably authoritative, the rotation event must be signed by a dual threshold satisficing subset of the newly current set of private keys., meaning that  the set of signatures on a Rotation event must satisfy two thresholds. These are the newly current threshold and the old  prior next threshold from the most recent prior Establishment event. Therefore the newly current set of public keys must include a satisfiable subset with respect to the old prior next threshold of public keys from the old prior next key list. The included newly current list of public keys enables verification of the Rotation event against the attached signatures.
+
+Including  the digests of the new next set of public keys in each Establishment event performs a pre-rotation operation on that set by making a Verifiable forward blinded commitment to that set. Consequently, no other key set may be used to satisfy the threshold for the next Rotation operation. Because the next set of pre-rotated keys is blinded (i.e.,  has not been exposed i.e. used to sign or even published) an attacker cannot forge and sign a Verifiable Rotation operation without first unblinding the pre-rotated keys. Therefore, given sufficient cryptographic strength of the digests, the only attack surface available to the adversary is a side-channel attack on the private key store itself and not on signing infrastructure. But the Controller, as the  creator of the pre-rotated private keys is free to make that key store as arbitrarily secure as needed because the pre-rotated keys are not used for signing until the next Rotation.  In other words, as long as the creator keeps secret the pre-rotated public keys themselves, an attacker must attack the key storage infrastructure because side-channel attacks on signing infrastructure are obviated.
+
+As explained in the First seen policy section, for a Validator, the first seen rule applies, that is, the first seen Version of an event is the authoritative one for that Validator. The first seen wins. In other words the first published Version becomes the first seen. Upon Rotation, the old prior next keys are exposed but only after a new next set has been created and stored. Thus the creator is always able to stay one step ahead of an attacker. By the time a new Rotation event is published, it is too late for an attacker to create a Verifiable Rotation event to supplant it because the original Version has already been published and may be first seen by the Validator. The window for an attacker is the network latency for the first published event to be first seen by the network of Validators. Any later, key compromise is too late.
+
+In essence, each key set follows a Rotation lifecycle where it changes its role with each Rotation event. A pre-rotated keypair set starts as the member of the next key set holding one-time rotation control authority. On the ensuing Rotation,  that keypair becomes part of the the current key set holding signing control authority. Finally on the following Rotation, that keypair is discarded. The lifecycle for the initial key set in an Inception event is slightly different. The initial key set starts as the current set holding signing authority and is discarded on the ensuing Rotation event, if any.
+
+Pre-Rotation example:
+
+Recall that the keypairs for a given AID may be represented by the indexed letter label such as A<sup>i,j</sup><sub>k</sub> where ‘i' denotes the i<sup>th</sup> keypair from the sequence of all keypairs, ‘j’ denotes the j<sup>th</sup> Establishment event in which the keypair is authoritative, and ‘k’ represents the k<sup>th</sup> Key event in which the keypair is authoritative. When a KEL has only Establishment events, then j = k. When only one keypair is authoritative at any given Key state then i = j.
+
+Also, recall that a pre-rotated keypair is designated by the digest of its public key appearing in an Establishment event. The digest is denoted as H(A) or H(A<sup>i,j</sup><sub>k</sub>) in indexed form. The appearance of the digest makes a forward Verifiable cryptographic commitment that may be realized in the future when and if that public key is exposed and listed as a current authoritative signing key in a subsequent Establishment event.
+
+The following example illustrates the lifecycle roles of the key sets drawn from a sequence of keys used for three Establishment events; one Inception followed by two Rotations. The initial number of authoritative keypairs is three and then changes to two and then changes back to three.
+
++------------+-----------------------------------------------------+----------+--------------------------------------------------------------+-----------+
+| **Event**  | **Current Keypairs**                                | **CT**   | **Next Keypairs**                                            | **NT**    |
++============+=====================================================+==========+==============================================================+===========+
+| **0**      | [A<sup>0,0</sup>, A<sup>1,0</sup>, A<sup>2,0</sup>] | 2        | [H(A<sup>3,1</sup>), H(A<sup>4,1</sup>)]                     | 1         |
++------------+-----------------------------------------------------+----------+--------------------------------------------------------------+-----------+
+| **1**      | [A<sup>3,1</sup>, A<sup>4,1</sup>]                  | 1        | [H(A<sup>5,2</sup>), H(A<sup>6,2</sup>), H(A<sup>7,2</sup>)] | 2         |
++------------+-----------------------------------------------------+----------+--------------------------------------------------------------+-----------+
+| **2**      | [A<sup>5,2</sup>, A<sup>6,2</sup>, A<sup>7,2</sup>] | 2        | [H(A<sup>8,3</sup>), H(A<sup>9,3</sup>), H(A<sup>10,3</sup>] | 2         |
++------------+-----------------------------------------------------+----------+--------------------------------------------------------------+-----------+
+
+Where:
+
+CTH means Current threshold.
+
+NTH means Next threshold.
+
+## Reserve rotation
+
+The pre-rotation mechanism supports partial pre-rotation or more exactly partial Rotation of pre-rotated keypairs. One important use case for partial Rotation is to enable pre-rotated keypairs designated in one Establishment event to be held in reserve and not exposed at the next (immediately subsequent) Establishment event. This reserve feature enables keypairs held by Controllers as members of a set of pre-rotated keypairs to be used for the purpose of fault tolerance in the case of non-availability by other Controllers while at the same time minimizing the burden of participation by the reserve members. In other words, a reserved pre-rotated keypair contributes to the potential availability and fault tolerance of control authority over the AID without necessarily requiring the participation of the reserve key-pair in a Rotation until and unless it is needed to provide continuity of control authority in the event of a fault (non-availability of a non-reserved member). This reserve feature enables different classes of key Controllers to contribute to the control authority over an AID. This enables provisional key control authority. For example, a key custodial service or key escrow service could hold a keypair in reserve to be used only upon satisfaction of the terms of the escrow agreement. This could be used to provide continuity of service in the case of some failure event. Provisional control authority may be used to prevent types of common-mode failures without burdening the provisional participants in the normal non-failure use cases.
+
+Reserve rotation example:
+
+Provided here is an illustrative example to help to clarify the pre-rotation protocol, especially with regard to  and threshold satisfaction for Reserve rotation.
+
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **SN**  | **Role** | **Keys**                                                                                         | **Thresholds**              | 
++=========+==========+==================================================================================================+=============================+
+| **0**   | Crnt     | *[A<sup>0</sup>, A<sup>1</sup>, A<sup>2</sup>, A<sup>3</sup>, A<sup>4</sup>]*                    | *[1/2, 1/2, 1/2, 1/4, 1/4]* |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **0**   | Next     | *[H(A<sup>5</sup>), H(A<sup>6</sup>), H(A<sup>7</sup>), H(A<sup>8</sup>), H(A<sup>9</sup>)]*     | *[1/2, 1/2, 1/2, 1/4, 1/4]* |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **1**   | Crnt     | *[A<sup>5</sup>, A<sup>6</sup>, A<sup>7</sup>]*                                                  | *[1/2, 1/2, 1/2]*           |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **1**   | Next     | *[H(A<sup>10</sup>), H(A<sup>11</sup>), H(A<sup>12</sup>), H(A<sup>8</sup>),H(A<sup>9</sup>)]*   | *[1/2, 1/2, 1/2, 1/4, 1/4]* |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **2**   | Crnt     | *[A<sup>10</sup>, A<sup>8</sup>, A<sup>9</sup>]*                                                 | *[1/2, 1/2, 1/2]*           |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **2**   | Next     | *[H(A<sup>13</sup>), H(A<sup>14</sup>), H(A<sup>15</sup>), H(A<sup>16</sup>),H(A<sup>17</sup>)]* | *[1/2, 1/2, 1/2, 1/4, 1/4]* |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **3**   | Crnt     | *[A<sup>13</sup>, A<sup>14</sup>, A<sup>15</sup>]*                                               | *[1/2, 1/2, 1/2]*           |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **3**   | Next     | *[H(A<sup>18</sup>), H(A<sup>19</sup>), H(A<sup>20</sup>), H(A<sup>16</sup>),H(A<sup>17</sup>)]* | *[1/2, 1/2, 1/2, 1/4, 1/4]* |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **4**   | Crnt     | *[A<sup>18</sup>, A<sup>20</sup>, A<sup>21</sup>]*                                               | *[1/2, 1/2, 1/2]*           |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **4**   | Next     | *[H(A<sup>22</sup>), H(A<sup>23</sup>), H(A<sup>24</sup>), H(A<sup>16</sup>),H(A<sup>17</sup>)]* | *[1/2, 1/2, 1/2, 1/4, 1/4]* |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **5**   | Crnt     | *[A<sup>22</sup>, A<sup>25</sup>, A<sup>26</sup>, A<sup>16</sup>, A<sup>17</sup>]*               | *[1/2, 1/2, 1/2, 0, 0]*     |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **5**   | Next     | *[H(A<sup>27</sup>), H(A<sup>28</sup>), H(A<sup>29</sup>), H(A<sup>30</sup>),H(A<sup>31</sup>)]* | *[1/2, 1/2, 1/2, 1/4, 1/4]* |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+
+Where, in  the column labels:
+
+SN is the sequence number of the event. Each event uses two rows in the table.
+Role is either Current (Crnt) or Next and indicates the role of the key list and threshold on that row.
+Keys is the list of public keys denoted with indexed label of the keypair sequence.
+Threshold is the threshold of signatures that must be satisfied for validity.
+
+Commentary of each event:
+
+(0) Inception: Five keypairs have signing authority and five other keypairs have rotation authority. Any two of the first three or any one of the first three and both the last two are sufficient. This anticipates holding the last two in reserve.
+
+(1) Rotation: The first three keypairs from the prior next, A<sup>5</sup>, A<sup>6</sup>, and A<sup>7</sup>, are rotated at the new current signing keypairs. This exposes the keypairs. The last two from the prior next, A<sup>8</sup> and A<sup>9</sup>, are held in reserve. They have not been exposed are included in the next key list.
+
+(2) Rotation: The prior next keypairs, A<sup>11</sup> and A<sup>12</sup> are unavailable to sign the Rotation and participate as the part of the newly current signing keys. Therefore, A<sup>8</sup> and A<sup>9</sup> must be activated (pulled out of reserve) and included and exposed as both one-time rotation keys and newly current signing keys. The signing authority (weight) of each of A<sup>8</sup> and A<sup>9</sup> has been increased to 1/2 from 1/4. This means that any two of the three of A<sup>10</sup>, A<sup>8</sup>, and A<sup>9</sup> may satisfy the signing threshold. Nonetheless, the Rotation event \#2 MUST be signed by all three of A<sup>10</sup>, A<sup>8</sup>, and A<sup>9</sup> in order to satisfy the prior next threshold because in that threshold A<sup>8</sup>, and A<sup>9</sup>  only have a weight of 1/4.
+
+(3) Rotation: The keypairs H(A<sup>16</sup>),H(A<sup>17</sup> have been held in reserve from event \#2
+
+(4) Rotation: The keypairs H(A<sup>16</sup>), H(A<sup>17</sup> continue to be held in reserve.
+
+(5) Rotation: The keypairs A<sup>16</sup>, and A<sup>17</sup> are pulled out of reserved and exposed in order to perform the Rotation because A<sup>23</sup>, and A<sup>24</sup> are unavailable. Two new keypairs, A<sup>25</sup>, A<sup>26</sup>, are added to the current signing key list. The current signing authority of A<sup>16</sup>, and A<sup>17</sup> is none because they are assigned a weight of 0 in the new current signing threshold. For the Rotation event to be valid, it must be signed by A<sup>22</sup>, A<sup>16</sup>, and A<sup>17</sup> in order to satisfy the prior next threshold for rotation authority and also must be signed by any two of A<sup>22</sup>, A<sup>25</sup>, and A<sup>26</sup> in order to satisfy the new current signing authority for the event itself. This illustrates how reserved keypairs may be used exclusively for rotation authority and not for signing authority.
+
+
+### Custodial rotation
+
+Partial pre-rotation supports another important use case that of Custodial key rotation. Because control authority is split between two key sets, the first for signing authority and the second (pre-roateted) for rotation authority the associated thresholds and key list can be structured in such a way that a designated custodial agent can hold signing authority while the  original Controller can hold exclusive rotation authority. The holder of the rotation authority can then at any time without the cooperation of the custodial agent if need be revoke the agent's signing authority and assign it so some other agent or return that authority to itself.
+
+Custodial rotation example:
+
+Provided here is an illustrative example to help to clarify the pre-rotation protocol, especially with regard to threshold satisfaction for Custodial rotation.
+
+
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **SN**  | **Role** | **Keys**                                                                                         | **Thresholds**              | 
++=========+==========+==================================================================================================+=============================+
+| **0**   | Crnt     | *[A<sup>0</sup>, A<sup>1</sup>, A<sup>2</sup>]*                                                  | *[1/2, 1/2, 1/2]*           |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **0**   | Next     | *[H(A<sup>3</sup>), H(A<sup>4</sup>), H(A<sup>5</sup>)]*                                         | *[1/2, 1/2, 1/2]*           |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **1**   | Crnt     | *[A<sup>3</sup>, A<sup>4</sup>, A<sup>5</sup>, A<sup>6</sup>, A<sup>7</sup>, A<sup>8</sup>]*     | *[0, 0, 0, 1/2, 1/2, 1/2]*  |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **1**   | Next     | *[H(A<sup>9</sup>), H(A<sup>10</sup>), H(A<sup>11</sup>)]*                                       | *[1/2, 1/2, 1/2]*           |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **2**   | Crnt     | *[A<sup>9</sup>, A<sup>10</sup>, A<sup>11</sup>, A<sup>12</sup>, A<sup>13</sup>, A<sup>14</sup>]*| *[0, 0, 0, 1/2, 1/2, 1/2]*  |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+| **2**   | Next     | *[H(A<sup>15</sup>), H(A<sup>16</sup>), H(A<sup>17</sup>)]*                                      | *[1/2, 1/2, 1/2]*           |
++---------+----------+--------------------------------------------------------------------------------------------------+-----------------------------+
+
+Where for the column labels:
+
+SN is the sequence number of the event. Each event uses two rows in the table.
+Role is either Current (Crnt) or Next and indicates the role of the key list and threshold on that row.
+Keys is the list of public keys denoted with indexed label of the keypair sequence.
+Threshold is the threshold of signatures that must be satisfied for validity.
+
+
+Commentary of each event:
+
+(0) Inception: The private keys from current signing keypairs  A<sup>0</sup>, A<sup>1</sup>, and A<sup>2</sup> are held by the custodian of the identifier. The owner of the identifier provides the digests of the next rotation keypairs, H(A<sup>3</sup>), H(A<sup>4</sup>), and H(A<sup>5</sup>) to the custodian in order that the custodian may include them in the event and then sign the event. The owner holds the private keys from the next rotation keypairs A<sup>3</sup>, A<sup>4</sup>, and A<sup>5</sup>. A self-addressing AID would then be created by the formulation of the Inception event. Once formed, the custodian controls the signing authority over the identifier by virtue of holding the associated private keys for the current key list. But the Controller exercises the rotation authority by virtue of holding the associated private keys for the next key list. Because the Controller of the rotation authority may at their sole discretion revoke and replace the keys that hold signing authority, the owner, holder of the next private keys, is ultimately in control of the identifier so constituted by this Inception event.
+
+(1) Rotation: The owner changes custodians with this event. The new custodian creates new current signing keypairs, A<sup>6</sup>, A<sup>7</sup>, and A<sup>8</sup> and holds the associated private keys. The new custodian provides the public keys A<sup>6</sup>, A<sup>7</sup>, and A<sup>8</sup> to the owner so that the owner can formulate and sign the Rotation event that transfers signing authority to the new custodian. The owner exposes its rotation public keys,  A<sup>3</sup>, A<sup>4</sup>, and A<sup>5</sup> by including them in the new current key list. But the weights of those rotation keys in the new current signing threshold are all 0 so they have no signing authority.  The owner creates a new set of next keypairs and includes their public key digests, H(A<sup>9</sup>), H(A<sup>10</sup>), H(A<sup>11</sup>) in the new next key list. The owner holds the associated private keys and thereby retains rotation authority. This event must be signed by any two of A<sup>3</sup>, A<sup>4</sup>, and A<sup>5</sup> in order to satisfy the prior next threshold and also must be signed by any two A<sup>6</sup>, A<sup>7</sup>, and A<sup>8</sup> in order to satisfy the new current signing threshold. The new current threshold and new next threshold clearly delineate that the new custodian now holds exclusive signing authority and owner continues to retain exclusive rotation authority.
+
+(2) Rotation: Change to yet another custodian following the same pattern as event \#1
+
+### Partial pre-rotation 
+
+The KERI protocol includes support for Partial pre-rotation i.e., a Rotation operation on a set of pre-rotated keys that may keep some keys in reserve (i.e., unexposed) while exposing others as needed.
+
+As described above, a valid Rotation operation requires the satisfaction of two different thresholds -  the current threshold of the given Rotation event with respect to its associated current public key list and the next threshold from the given Rotation event's most recent prior Establishment event with respect to its associated blinded next key digest list. For short, the next threshold from the most recent prior Establishment event is denoted as the prior next threshold, and the list of unblinded public keys taken from the blinded key digest list from the most recent prior Establishment event as the prior next key list. Explication of the elements of the prior next key list requires exposing or unblinding the underlying public keys committed to by their corresponding digests that appear in the next key digest list of the most recent prior Establishment event. The unexposed (blinded) public keys may be held in reserve.
+
+More precisely, any Rotation event's current public key list must include a satisfiable subset of the prior next key list with respect to the prior next threshold. In addition, any Rotation event's current public key list must include a satisfiable set of public keys with respect to its current threshold. In other words, the current public key list must be satisfiable with respect to both the current and prior next thresholds.
+
+To reiterate, in order to make Verifiable the maintenance of the integrity of the forward commitment to the pre-rotated list of keys made by the prior next event, i.e., provide Verifiable rotation control authority, the current key list must include a satisfiable subset of exposed (unblinded) pre-rotated next keys from the most recent prior Establishment event where satisfiable is with respect to the  prior next threshold. Moreover, in order to establish Verifiable signing control authority, the current key list also must include a satisfiable subset of public keys where satisfiable is with respect to the current threshold.
+
+These two conditions are satisfied trivially whenever the current and prior next key lists and thresholds are equivalent. When both the current and the prior next key lists and thresholds are identical, then the validation can be simplified by comparing the two lists and thresholds to confirm that they are identical and then confirming that the signatures satisfy the one threshold with respect to the one key list. When not identical, the Validator must perform the appropriate set math to confirm compliance.
+
+Recall that the order of appearance of the public key in a given key list and its associated threshold weight list must be the same. The order of appearance, however, of any public keys that appear in both the current and prior next key lists may be different between the two key lists and hence the two associated threshold weight lists.  A Validator therefore must confirm that the set of keys in the current key list truly includes a satisfiable subset of the prior next key list and that the current key list is satisfiable with respect to both the current and prior next thresholds. Actual satisfaction means that the set of attached signatures must  satisfy both the current and prior next thresholds as applied to their respective key lists.
+
+Suppose that the current public key list does not include a proper subset of the prior next key list. This means that no keys were held in reserve. This also means that the current key list is either identical to the prior next key list or is a superset of the prior next key list.  Nonetheless, such a Rotation may change the current key list and or threshold with respect to the prior next key list and/or threshold as long as it meets the satisfiability constraints defined above.
+
+If the current key list includes the full set of keys from the prior next key list,  then a full Rotation has occurred, not a Partial rotation, because no keys were held in reserve or omitted. A full Rotation may add new keys to the current key list and/or change the current threshold with respect to the prior next key list and threshold.
+
 
 \backmatter
 
