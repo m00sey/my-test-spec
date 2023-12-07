@@ -11,13 +11,8 @@ iso:
     document-year: 2022
     draft-stage: WD
 references:
-    - id: JSOND
-      title: "JavaScript Object Notation Delimiters"
-      url: "https://www.json.org/json-en.html"
-      author: "author"
-      citation-label: "JSON Delimiters"
-    - id: RFC8259
-      citation-label: "RFC8259"
+    - id: JSON
+      citation-label: "JSON"
       url: "https://www.rfc-editor.org/rfc/rfc8259.txt"
       author: "T. Bray, Ed."
       title: "The JavaScript Object Notation (JSON) Data Interchange Format"
@@ -102,7 +97,7 @@ MAC (Message Authentication Code)
 # Actual document content {#sec:content}
 
 
-I can cite documents from the normative references: [@nrm:osi]. Or from the bibliography: [@RFC8259] [@JSOND].
+I can cite documents from the normative references: [@nrm:osi]. Or from the bibliography: [@JSON].
 
 
 : My fancy table {#tbl:fancy-table}
